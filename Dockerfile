@@ -1,16 +1,24 @@
-# Dockerfile
+# 빌드를 위한 임시 이미지
+FROM gradle:7.6-jdk17-alpine as build
+WORKDIR /workspace
 
-# jdk17 Image Start
+# 소스 코드 복사
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle .
+COPY settings.gradle .
+COPY src src
+
+# 권한 부여 및 빌드 실행
+RUN chmod +x ./gradlew
+RUN ./gradlew clean build
+
+# 최종 이미지
 FROM openjdk:17
+WORKDIR /app
 
-# 인자 설정 - JAR_File
-ARG JAR_FILE=build/libs/*.jar
-
-# jar 파일 복제
-COPY ${JAR_FILE} servers-0.0.1-SNAPSHOT.jar
-
-# 인자 설정 부분과 jar 파일 복제 부분 합쳐서 진행해도 무방
-#COPY build/libs/*.jar app.jar
+# 빌드된 JAR 파일 복사
+COPY --from=build /workspace/build/libs/*.jar servers-0.0.1-SNAPSHOT.jar
 
 # 실행 명령어
 ENTRYPOINT ["java", "-jar", "servers-0.0.1-SNAPSHOT.jar"]
