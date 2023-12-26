@@ -18,7 +18,8 @@ FROM openjdk:17
 WORKDIR /app
 
 # 빌드된 JAR 파일 복사
-COPY --from=build /workspace/build/libs/*.jar servers-0.0.1-SNAPSHOT.jar
+EXPOSE 8080
+COPY --from=build /workspace/build/libs/*.jar /servers-0.0.1-SNAPSHOT.jar
 
 # 실행 명령어
-ENTRYPOINT ["java", "-jar", "servers-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "/servers-0.0.1-SNAPSHOT.jar"]
