@@ -1,13 +1,16 @@
 package com.savannah.servers.hello;
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "Hello", description = "HelloController API for connection test")
 public class HelloController {
 
-    @RequestMapping
+    @GetMapping()
     public String Hello() {
         return "Hello, Savannah :)";
     }
+
 }
